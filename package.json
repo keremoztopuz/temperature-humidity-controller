@@ -1,0 +1,24 @@
+{
+  "name": "temperature-humidity-controller",
+  "version": "0.1.0",
+  "description": "Arduino based temperature and humidity controller and web services",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keremoztopuz/temperature-humidity-controller.git"
+  },
+  "keywords": [
+    "Arduino",
+    "temperature",
+    "humidity"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/keremoztopuz/temperature-humidity-controller/issues"
+  },
+  "homepage": "https://github.com/keremoztopuz/temperature-humidity-controller#readme"
+}
