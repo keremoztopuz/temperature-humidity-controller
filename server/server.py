@@ -1,9 +1,9 @@
 from flask import Flask , render_template
 import argparse
+from api import *
 
 app = Flask(__name__)
 @app.route("/")
-
 def index():
     return "Hello HTML"
 
