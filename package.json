@@ -2,7 +2,10 @@
   "name": "temperature-humidity-controller",
   "version": "0.1.0",
   "description": "Arduino based temperature and humidity controller and web services",
+  "main": "index.js",
   "scripts": {
+    "server": "python server/server.py",
+    "server-debug": "python server/server.py --debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
