@@ -7,6 +7,10 @@
 #include <Adafruit_PCD8544.h>
 #include <Fonts/FreeSansBold9pt7b.h>
 
+
+
+
+
 String message = "";
 bool messageReady = false;
 
