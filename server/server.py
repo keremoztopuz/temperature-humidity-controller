@@ -2,10 +2,25 @@ from flask import Flask , render_template
 import argparse
 from api import *
 
+# main site
+
 app = Flask(__name__)
+
 @app.route("/")
 def index():
-    return "Hello HTML"
+    return render_template("index.html")
+
+@app.route("/temperature")
+def temperature():
+    return render_template("temperature.html")
+
+@app.route("/squares")
+def click():
+    return render_template("squares.html")
+
+@app.route("/api/getdata/<int:device_id>", methods=["GET"])
+def getdata(device_id : int ):
+    return api_getdata(device_id)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
@@ -13,7 +28,5 @@ if __name__ == "__main__":
     parser.add_argument('--port', type=int, default=5000, required=False, help='Port number (default: 5000)')
     parser.add_argument('--ip', type=str, default='127.0.0.1', required=False, help='IP address (default: 127.0.0.1)')
     args = parser.parse_args()
-    print('Hello,', args.debug)
+    print(args.debug)
     app.run(host=args.ip, port=args.port, debug=args.debug)
-    
-    #332211
