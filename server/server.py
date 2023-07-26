@@ -34,6 +34,14 @@ def setdevicelist(setdevlist: str):
 def setdevicename(device_id : int , name : str):
     return api_setdevicename(device_id, name)
 
+@app.route("/api/getgraph/<int:device_id>", methods=["GET"]) #last 12 hours
+def getgraph(device_id : int ):
+    return api_getgraph(device_id)
+
+@app.route("/api/getgraphfull/<int:device_id>/<string:start_date>/<string:end_date>", methods=["GET"])
+def getgraphfull(device_id : int , start_date : int , end_date : int):
+    return api_getgraphfull(device_id, start_date, end_date)
+ 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
     parser.add_argument('--debug', action='store_true', required=False, help='Enable debug mode')
