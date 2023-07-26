@@ -1,22 +1,40 @@
-from flask import Flask , render_template
-import argparse
+from flask import Flask , render_template,redirect,url_for,session,logging,request
+from flask_mysqldb import MySQL
 from api import *
-
-# main site
+import argparse
 
 app = Flask(__name__)
+
+valid_users = {
+    "demo_user": "demo_password",
+    "test_user": "test_password"
+}
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        if username in valid_users and valid_users[username] == password:
+            return redirect(url_for("welcome", username=username))
+        else:
+            error_message = "Invalid username or password. Please try again."
+            return render_template("login.html", error=error_message)
+
+    return render_template("login.html")
+
+@app.route("/welcome/<username>")
+def welcome(username):
+    return "welcome user"
+
+mysql = MySQL(app)
+
+# main site
 
 @app.route("/")
 def index():
     return render_template("index.html")
-
-@app.route("/temperature")
-def temperature():
-    return render_template("temperature.html")
-
-@app.route("/squares")
-def click():
-    return render_template("squares.html")
 
 
 if __name__ == "__main__":
