@@ -7,3 +7,5 @@ def api_setdata(device_id , temperature):
 def api_setdevicelist(setdevlist):
     return "api_setdevicelist:" + " " + str(setdevlist)
 
+def api_setdevicename(device_id , name):
+    return "api_setdevicename:" + " " + str(device_id) + " " + name

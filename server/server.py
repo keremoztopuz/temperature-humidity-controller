@@ -30,7 +30,9 @@ def setdata(device_id : int , temperature : float):
 def setdevicelist(setdevlist: str):
     return api_setdevicelist(setdevlist)
 
-
+@app.route("/api/setdevicename/<int:device_id>/<string:name>", methods=["POST"])
+def setdevicename(device_id : int , name : str):
+    return api_setdevicename(device_id, name)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
