@@ -4,6 +4,7 @@ from api import *
 import argparse
 
 app = Flask(__name__)
+app.secret_key = "XYXYXY"
 
 valid_users = {
     "demo_user": "demo_password",
@@ -12,29 +13,44 @@ valid_users = {
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if 'logged_in' in session:
+        return redirect(url_for('index'))
+    
+    error = None
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
 
-        if username in valid_users and valid_users[username] == password:
-            return redirect(url_for("welcome", username=username))
+        if username == "oguzarduc" and password == "mauroicardi99":
+            session['logged_in'] = True  # Set the session variable to indicate successful login
+            return redirect(url_for("index"))
         else:
-            error_message = "Invalid username or password. Please try again."
-            return render_template("login.html", error=error_message)
+            error = "Invalid username or password. Please try again."
 
-    return render_template("login.html")
+    return render_template("login.html", error=error)
 
-@app.route("/welcome/<username>")
-def welcome(username):
-    return "welcome user"
-
-mysql = MySQL(app)
 
 # main site
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if 'logged_in' in session:
+        return render_template("index_logged_in.html")
+    else:
+        return render_template("index.html")
+
+
+@app.route("/logout")
+def logout():
+    session.pop('logged_in', None) 
+    return redirect(url_for("index"))
+
+@app.route("/dashboard")
+def dashboard():
+    if 'logged_in' in session:
+        return render_template("dashboard.html")
+    else:
+        return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
