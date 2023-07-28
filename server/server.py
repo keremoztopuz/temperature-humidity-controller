@@ -2,8 +2,6 @@ from flask import Flask , render_template
 import argparse
 from api import *
 
-
-
 # main site
 
 app = Flask(__name__)
@@ -11,14 +9,6 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return render_template("index.html")
-
-@app.route("/temperature")
-def temperature():
-    return render_template("temperature.html")
-
-@app.route("/squares")
-def click():
-    return render_template("squares.html")
 
 @app.route("/api/getdata/<int:device_id>", methods=["GET"])
 def getdata(device_id : int ):
@@ -28,9 +18,9 @@ def getdata(device_id : int ):
 def setdata(device_id : int , temperature : float):
     return api_setdata(device_id, temperature)
 
-@app.route("/api/setdevicelist/<setdevlist>", methods=["POST"])
-def setdevicelist(setdevlist: str):
-    return api_setdevicelist(setdevlist)
+@app.route("/api/getdevicelist/<getdevlist>", methods=["POST"])
+def getdevicelist(getdevlist: str):
+    return api_getdevicelist(getdevlist)
 
 @app.route("/api/setdevicename/<int:device_id>/<string:name>", methods=["POST"])
 def setdevicename(device_id : int , name : str):
