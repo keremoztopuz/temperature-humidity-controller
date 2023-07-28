@@ -1,3 +1,35 @@
+from flask import Flask, request
+from flask_restful import Resource, Api, reqparse
+import psycopg2
+
+app = Flask(__name__)
+api = Api(app)
+
+conn = psycopg2.connect(
+    host="localhost",
+    database="temperaturehumidity",
+    password="123456",
+    user = "postgres"
+    )
+print("Connection Successful")
+
+cur = conn.cursor()
+
+#cur.execute("CREATE TABLE person(name TEXT, age INT, height REAL)")
+#cur.execute("INSERT INTO person(name, age, height) VALUES (%s, %s, %s)", ("Umut", 45, 199))
+
+#READ FROM DATABASE
+cur.execute("SELECT * FROM person")
+rows = cur.fetchall()
+
+for i in rows:
+    print(i)
+
+conn.commit()
+
+conn.close()
+
+
 def api_getdata(device_id):
     return "api_getdata:" + " " + str(device_id)
 

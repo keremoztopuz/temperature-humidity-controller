@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return render_template("index.html")
-
+    
 @app.route("/api/getdata/<int:device_id>", methods=["GET"])
 def getdata(device_id : int ):
     return api_getdata(device_id)
