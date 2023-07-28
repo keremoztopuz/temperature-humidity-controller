@@ -1,5 +1,4 @@
 from flask import Flask , render_template,redirect,url_for,session,logging,request
-from flask_mysqldb import MySQL
 from api import *
 import argparse
 
@@ -22,13 +21,12 @@ def login():
         password = request.form.get("password", "")
 
         if username == "oguzarduc" and password == "mauroicardi99":
-            session['logged_in'] = True  # Set the session variable to indicate successful login
+            session['logged_in'] = True  
             return redirect(url_for("index"))
         else:
             error = "Invalid username or password. Please try again."
 
     return render_template("login.html", error=error)
-
 
 # main site
 
@@ -51,6 +49,10 @@ def dashboard():
         return render_template("dashboard.html")
     else:
         return redirect(url_for("login"))
+
+@app.route("/dashboard/graphs")
+def graphs():
+    return render_template("graphs.html")
 
 
 if __name__ == "__main__":
