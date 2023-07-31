@@ -18,9 +18,9 @@ def getdata(device_id : int ):
 def setdata(device_id : int , temperature : float):
     return api_setdata(device_id, temperature)
 
-@app.route("/api/getdevicelist/<getdevlist>", methods=["POST"])
-def getdevicelist(getdevlist: str):
-    return api_getdevicelist(getdevlist)
+@app.route("/api/getdevicelist", methods=["GET"])
+def getdevicelist():
+    return api_getdevicelist()
 
 @app.route("/api/setdevicename/<int:device_id>/<string:name>", methods=["POST"])
 def setdevicename(device_id : int , name : str):
