@@ -1,6 +1,9 @@
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import psycopg2
+import json
+from datetime import datetime
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,23 +14,40 @@ conn = psycopg2.connect(
     password="123456",
     user = "postgres"
     )
+
 print("Connection Successful")
 
 cur = conn.cursor()
 
-#cur.execute("CREATE TABLE person(name TEXT, age INT, height REAL)")
-#cur.execute("INSERT INTO person(name, age, height) VALUES (%s, %s, %s)", ("Umut", 45, 199))
+initial_date = datetime.now()
+added_date = initial_date
+
+cur.execute("INSERT INTO devicedatas(data_id, device_id, data_date) VALUES (%s, %s, %s)", (int(input("data_id:")), int(input("device_id:")) , added_date))
+cur.execute("INSERT INTO devices(device_id, device_name) VALUES (%s, %s)", (int(input("device_id:")), str(input("device_name:"))))
 
 #READ FROM DATABASE
-cur.execute("SELECT * FROM person")
+cur.execute("SELECT * FROM devicedatas")
 rows = cur.fetchall()
 
-for i in rows:
-    print(i)
+data_list = []
+for row in rows:
+    data_dict = {
+        'data_id': row[0],
+        'device_id': row[1],
+        'data_dates': row[2].strftime('%Y-%m-%d %H:%M:%S')
+    }
+    data_list.append(data_dict)
+
+json_data = json.dumps(data_list)
+print(json_data)
+
+#OPEN DATABASE
+with open('output.json', 'w') as file:
+    file.write(json_data)
 
 conn.commit()
-
 conn.close()
+
 
 
 def api_getdata(device_id):
