@@ -1,4 +1,4 @@
-from flask import Flask , render_template
+from flask import Flask , render_template, request , jsonify
 import argparse
 from api import *
 
@@ -16,7 +16,8 @@ def getdata(device_id : int ):
 
 @app.route("/api/setdata/<int:device_id>/<float:temperature>", methods=["POST"])
 def setdata(device_id : int , temperature : float):
-    return api_setdata(device_id, temperature)
+    data = api_setdata(device_id, temperature)
+    return jsonify(data)
 
 @app.route("/api/getdevicelist", methods=["GET"])
 def getdevicelist():
@@ -26,7 +27,7 @@ def getdevicelist():
 def setdevicename(device_id : int , name : str):
     return api_setdevicename(device_id, name)
 
-@app.route("/api/getgraph/<int:device_id>", methods=["GET"]) #last 12 hours
+@app.route("/api/getgraph/<int:device_id>", methods=["GET"])
 def getgraph(device_id : int ):
     return api_getgraph(device_id)
 
