@@ -9,42 +9,6 @@ import argparse
 app = Flask(__name__)
 api = Api(app)
 
-class GetData:
-    def __init__(self, device_id, data_date, conn):
-        self.device_id = device_id
-        self.data_date = data_date
-        self.conn = conn
-
-    def insert_data(self):
-        cur = self.conn.cursor()
-        cur.execute("INSERT INTO devicedatas(device_id, data_date) VALUES (%s, %s)",
-                    (self.device_id, self.data_date))
-        cur.execute("INSERT INTO devices(device_id, device_name) VALUES (%s, %s)",
-                    (self.device_id, request.args.get('device_name')))  
-
-        self.conn.commit()
-        cur.close()
-
-    def get_device_list(self):
-        cur = self.conn.cursor()
-        cur.execute("SELECT * FROM devicedatas JOIN devices ON devicedatas.device_id = devices.device_id")
-        rows = cur.fetchall()
-
-        data_list = []
-        for row in rows:
-            data_dict = {
-                'data_id': row[0],
-                'device_id': row[1],
-                'data_date': row[2].strftime('%Y-%m-%d %H:%M:%S'),
-                'device_name': row[4]
-            }
-            data_list.append(data_dict)
-
-        json_data = json.dumps(data_list, indent=4)
-        cur.close()
-
-        return json_data
-
 def api_getdata(device_id: int):
     conn = psycopg2.connect(
         host="localhost",
@@ -52,7 +16,7 @@ def api_getdata(device_id: int):
         password="123456",
         user="postgres"
     )
-
+"""
     try:
         initial_date = datetime.now()
         added_date = initial_date
@@ -65,7 +29,7 @@ def api_getdata(device_id: int):
         return jsonify({"error": str(e)})
     finally:
         conn.close()
-
+"""
 
 def api_getdevicelist():
     conn = psycopg2.connect(
@@ -74,7 +38,7 @@ def api_getdevicelist():
         password="123456",
         user="postgres"
     )
-
+    """
     device_id = 1  
     data_date = datetime.now()  
 
@@ -82,8 +46,7 @@ def api_getdevicelist():
     json_data = data_handler.get_device_list()
 
     return jsonify(json.loads(json_data))
-
-    """
+    
     with open('output.json','w') as file:
         file.write(json_data)
 
