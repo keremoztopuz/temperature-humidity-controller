@@ -7,161 +7,24 @@ import http.client
 import argparse
 
 app = Flask(__name__)
-api = Api(app)
 
-def api_getdata(device_id: int):
-    conn = psycopg2.connect(
-        host="localhost",
-        database="temperaturehumidity",
-        password="123456",
-        user="postgres"
-    )
-"""
-    try:
-        initial_date = datetime.now()
-        added_date = initial_date
+def api_getdata(device_id):
+    return "api_getdata:" + " " + str(device_id)
 
-        data_handler = GetData(device_id, added_date, conn)
-        data_handler.insert_data()
+def api_setdata(device_id, temperature, humidity):
+    return "api_setdata:" + " " + str(device_id, temperature, humidity)
 
-        return jsonify({"message": f"Data for device {device_id} inserted successfully!"})
-    except Exception as e:
-        return jsonify({"error": str(e)})
-    finally:
-        conn.close()
-"""
+def api_setdevicelist():
+    return "api_setdevicelist:" + " " 
 
-def api_getdevicelist():
-    conn = psycopg2.connect(
-        host="localhost",
-        database="temperaturehumidity",
-        password="123456",
-        user="postgres"
-    )
-    """
-    device_id = 1  
-    data_date = datetime.now()  
-
-    data_handler = GetData(device_id, data_date, conn)
-    json_data = data_handler.get_device_list()
-
-    return jsonify(json.loads(json_data))
-    
-    with open('output.json','w') as file:
-        file.write(json_data)
-
-    try:
-        with open('output.json', 'r') as file:
-            data_list = json.load(file)
-            return json.dumps(data_list)
-    except FileNotFoundError:
-        return "Data not available."
-    except Exception as e:
-        return f"An error occurred: {str(e)}
-    """
-    
-def api_setdevicename(device_id , name):
-    api_host = "localhost"
-    api_port = 5000
-    api_path = f"/api/setdevicename/{device_id}/{name}"
-
-    try:
-        connection = http.client.HTTPConnection(api_host, api_port)
-        headers = {'Content-type': 'application/json'}
-
-        connection.request("POST", api_path, headers=headers)
-        response = connection.getresponse()
-
-        response_data = json.loads(response.read().decode())
-
-        connection.close()
-
-        if response.status == 200:
-            return response_data
-        else:
-            return {"error": f"Failed to update device name. Status code: {response.status}"}
-    except Exception as e:
-        return {"error": str(e)}
-
-def api_setdata(device_id, temperature):
-    conn = psycopg2.connect(
-        host="localhost",
-        database="temperaturehumidity",
-        password="123456",
-        user="postgres"
-    )
-
-    try:
-        data_date = datetime.now()
-        cur = conn.cursor()
-        cur.execute("INSERT INTO devicedatas (device_id, data_date, temperature) VALUES (%s, %s, %s)",
-                    (device_id, data_date, temperature))
-        conn.commit()
-        cur.close()
-
-        return jsonify({"message": f"Data for device {device_id} set successfully!"})
-    except Exception as e:
-        return jsonify({"error": str(e)})
-    finally:
-        conn.close()
+def api_setdevicename(device_id, device_name):
+    return "api_setdevicename:" + " " + str(device_id) + " " + device_name
 
 def api_getgraph(device_id):
-    conn = psycopg2.connect(
-        host="localhost",
-        database="temperaturehumidity",
-        password="123456",
-        user="postgres"
-    )
-
-    try:
-        cur = conn.cursor()
-        cur.execute("SELECT data_date, temperature FROM devicedatas WHERE device_id = %s", (device_id,))
-        rows = cur.fetchall()
-        cur.close()
-
-        data_list = []
-        for row in rows:
-            data_dict = {
-                'data_date': row[0].strftime('%Y-%m-%d %H:%M:%S'),
-                'temperature': row[1]
-            }
-            data_list.append(data_dict)
-
-        return jsonify(data_list)
-    except Exception as e:
-        return jsonify({"error": str(e)})
-    finally:
-        conn.close()
-
+    return "api_getgraph:" + " " + str(device_id)
 
 def api_getgraphfull(device_id, start_date, end_date):
-    conn = psycopg2.connect(
-        host="localhost",
-        database="temperaturehumidity",
-        password="123456",
-        user="postgres"
-    )
-
-    try:
-        cur = conn.cursor()
-        cur.execute("SELECT data_date, temperature FROM devicedatas WHERE device_id = %s AND data_date BETWEEN %s AND %s",
-                    (device_id, start_date, end_date))
-        rows = cur.fetchall()
-        cur.close()
-
-        data_list = []
-        for row in rows:
-            data_dict = {
-                'data_date': row[0].strftime('%Y-%m-%d %H:%M:%S'),
-                'temperature': row[1]
-            }
-            data_list.append(data_dict)
-
-        return jsonify(data_list)
-    except Exception as e:
-        return jsonify({"error": str(e)})
-    finally:
-        conn.close()
+    return "api_getgraphfull:" + " " + str(device_id) + " " + str(start_date) + " " + str(end_date)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
