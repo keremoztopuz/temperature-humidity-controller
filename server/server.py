@@ -2,58 +2,51 @@ from flask import Flask , render_template,redirect,url_for,session,logging,reque
 from api import *
 import argparse
 
+from flask import Flask , render_template,redirect,url_for,session,logging,request
+from api import *
+import argparse
+
 app = Flask(__name__)
 app.secret_key = "XYXYXY"
 
-valid_users = {
-    "demo_user": "demo_password",
-    "test_user": "test_password"
+data = {
+    "device1": {
+        "data": [
+            {"date": "2023-08-01", "value": {}, "image": "", "alt": "Image 1"},
+            {"date": "2023-08-02", "value": {}, "image": "", "alt": "Image 2"},
+            {"date": "2023-08-03", "value": {}, "image": "", "alt": "Image 3"}
+            # ... Diğer tarih verileri ...
+        ]
+    },
+    "device2": {
+        "data": [
+            {"date": "2023-08-01", "value": {}, "image": "", "alt": "Image 4"},
+            {"date": "2023-08-02", "value": {}, "image": "", "alt": "Image 5"},
+            {"date": "2023-08-03", "value": {}, "image": "", "alt": "Image 6"}
+            # ... Diğer tarih verileri ...
+        ]
+    }
 }
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if 'logged_in' in session:
-        return redirect(url_for('index'))
-    
-    error = None
-    if request.method == "POST":
-        username = request.form.get("username", "")
-        password = request.form.get("password", "")
-
-        if username == "oguzarduc" and password == "mauroicardi99":
-            session['logged_in'] = True  
-            return redirect(url_for("index"))
-        else:
-            error = "Invalid username or password. Please try again."
-
-    return render_template("login.html", error=error)
 
 # main site
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    if 'logged_in' in session:
-        return render_template("index_logged_in.html")
-    else:
-        return render_template("index.html")
+    error_message = ""
+    chart_data = []
 
+    if request.method == "POST":
+        start_date = request.form.get("startDate")
+        end_date = request.form.get("endDate")
+        selected_device = request.form.get("device")
 
-@app.route("/logout")
-def logout():
-    session.pop('logged_in', None) 
-    return redirect(url_for("index"))
+        if not start_date or not end_date or not selected_device:
+            error_message = "Lütfen tarih aralığı ve cihaz seçimini doldurun."
+        else:
+            chart_data = data.get(selected_device, {}).get("data", [])
+            chart_data = [item for item in chart_data if start_date <= item["date"] <= end_date]
 
-@app.route("/dashboard")
-def dashboard():
-    if 'logged_in' in session:
-        return render_template("dashboard.html")
-    else:
-        return redirect(url_for("login"))
-
-@app.route("/dashboard/graphs")
-def graphs():
-    return render_template("graphs.html")
-
+    return render_template("index.html", error_message=error_message, chart_data=chart_data)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
