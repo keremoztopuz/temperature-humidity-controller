@@ -1,30 +1,62 @@
 from flask import Flask, request, jsonify
-from flask_restful import Resource, Api, reqparse
 import psycopg2
-import json
 from datetime import datetime
 import http.client
 import argparse
 
 app = Flask(__name__)
 
-def api_getdata(device_id):
-    return "api_getdata:" + " " + str(device_id)
+# PostgreSQL veritabanı bağlantısı için gerekli bilgileri doldurun
+db_host = "localhost"
+db_name = "temperaturehumidity"
+db_user = "postgres"
+db_password = "123456"
 
+# API endpoint'leri
+def api_getdata(device_id):
+    return jsonify({"data": "api_getdata: " + str(device_id)})
+
+# PostgreSQL veritabanına veri eklemek için işlev
 def api_setdata(device_id, temperature, humidity):
-    return "api_setdata:" + " " + str(device_id, temperature, humidity)
+    try:
+        connection = psycopg2.connect(
+            host=db_host, database=db_name, user=db_user, password=db_password
+        )
+        cursor = connection.cursor()
+
+        # Verileri ekleme işlemi
+        insert_query = "INSERT INTO devicedatas (device_id, datetime, temperature, humidity) VALUES (%s, %s, %s, %s);"
+        cursor.execute(insert_query, (device_id, datetime, temperature, humidity))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return jsonify({
+            'status': 'ok',
+            'message': 'Data added successfully'
+            })
+
+    except Exception as e:
+        return ({
+            'status' : 'error',
+            'message': 'Data could not add try again ' + str(e)
+            })
 
 def api_setdevicelist():
-    return "api_setdevicelist:" + " " 
+    return jsonify({"data": "api_setdevicelist"})
 
-def api_setdevicename(device_id, device_name):
-    return "api_setdevicename:" + " " + str(device_id) + " " + device_name
+def api_setdevicename():
+    data = request.json
+    device_id = data.get("device_id")
+    device_name = data.get("device_name")
+    return jsonify({"data": "api_setdevicename: " + str(device_id) + " " + device_name})
 
 def api_getgraph(device_id):
-    return "api_getgraph:" + " " + str(device_id)
+    return jsonify({"data": "api_getgraph: " + str(device_id)})
 
 def api_getgraphfull(device_id, start_date, end_date):
-    return "api_getgraphfull:" + " " + str(device_id) + " " + str(start_date) + " " + str(end_date)
+    return jsonify({"data": "api_getgraphfull: " + str(device_id) + " " + start_date + " " + end_date})
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
@@ -34,5 +66,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
     print(args.debug)
     app.run(host=args.ip, port=args.port, debug=args.debug)
-
-

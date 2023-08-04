@@ -1,0 +1,6 @@
+flask==2.3.2
+argparse==1.4.0
+virtualenv==20.24.1
+flask-restful==0.3.10
+Flask-SQLAlchemy==3.0.5
+pyscopg2==66.0.2

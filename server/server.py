@@ -14,10 +14,11 @@ def index():
 def getdata(device_id : int ):
     return api_getdata(device_id)
 
-@app.route("/api/setdata/<int:device_id>/<float:temperature>", methods=["POST"])
-def setdata(device_id : int , temperature : float):
-    data = api_setdata(device_id, temperature)
-    return jsonify(data)
+@app.route("/api/setdata/<int:device_id>/<float:temperature>/<float:humidity>", methods=["GET"])
+def setdata(device_id: int, temperature: float, humidity: float):
+    result = api_setdata(device_id, temperature, humidity)
+    return jsonify({"result": result})
+
 
 @app.route("/api/setdevicelist", methods=["POST"])
 def setdevicelist():
@@ -32,9 +33,9 @@ def getgraph(device_id : int ):
     return api_getgraph(device_id)
 
 @app.route("/api/getgraphfull/<int:device_id>/<string:start_date>/<string:end_date>", methods=["GET"])
-def getgraphfull(device_id : int , start_date : int , end_date : int):
+def getgraphfull(device_id: int, start_date: str, end_date: str):
     return api_getgraphfull(device_id, start_date, end_date)
- 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
     parser.add_argument('--debug', action='store_true', required=False, help='Enable debug mode')
