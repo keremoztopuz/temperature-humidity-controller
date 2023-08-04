@@ -17,8 +17,7 @@ def getdata(device_id : int ):
 @app.route("/api/setdata/<int:device_id>/<float:temperature>/<float:humidity>", methods=["GET"])
 def setdata(device_id: int, temperature: float, humidity: float):
     result = api_setdata(device_id, temperature, humidity)
-    return jsonify({"result": result})
-
+    return result
 
 @app.route("/api/setdevicelist", methods=["POST"])
 def setdevicelist():

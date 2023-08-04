@@ -1,16 +1,17 @@
 from flask import Flask, request, jsonify
 import psycopg2
-from datetime import datetime
 import http.client
 import argparse
+from datetime import datetime
 
 app = Flask(__name__)
 
 # PostgreSQL veritabanı bağlantısı için gerekli bilgileri doldurun
 db_host = "localhost"
-db_name = "temperaturehumidity"
+db_name = "temperaturehumudity"
 db_user = "postgres"
 db_password = "123456"
+
 
 # API endpoint'leri
 def api_getdata(device_id):
@@ -20,13 +21,14 @@ def api_getdata(device_id):
 def api_setdata(device_id, temperature, humidity):
     try:
         connection = psycopg2.connect(
-            host=db_host, database=db_name, user=db_user, password=db_password
+            host=db_host, database=db_name, user=db_user, password=db_password, port=5433
         )
         cursor = connection.cursor()
 
         # Verileri ekleme işlemi
         insert_query = "INSERT INTO devicedatas (device_id, datetime, temperature, humidity) VALUES (%s, %s, %s, %s);"
-        cursor.execute(insert_query, (device_id, datetime, temperature, humidity))
+        current_datetime = datetime.now()
+        cursor.execute(insert_query, (device_id, current_datetime, temperature, humidity))
 
         connection.commit()
         cursor.close()
