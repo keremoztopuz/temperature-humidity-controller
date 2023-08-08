@@ -2,7 +2,7 @@
   "name": "temperature-humidity-controller",
   "version": "0.1.0",
   "description": "Arduino based temperature and humidity controller and web services",
-  "main": "server/server.py",
+  "main": "index.js",
   "scripts": {
     "server": "python server/server.py",
     "server-debug": "python server/server.py --debug",
@@ -25,14 +25,14 @@
       "url": "https://github.com/keremoztopuz"
     },
     {
-      "name": "Batuhan ERTEKIN",
+      "name": "Batuhan BERK ERTEKIN",
       "email": "batuhanertekinn@gmail.com",
       "url": "https://github.com/ertekinbatuhan"
     },
     {
       "name": "Yigit UGURLU",
       "email": "yigitugurlu2001@gmail.com",
-      "url": "https://github.com/yugurii"
+      "url": "https://github.com/ugurluyigit"
     }
   ],
   "license": "MIT",
@@ -41,3 +41,4 @@
   },
   "homepage": "https://github.com/keremoztopuz/temperature-humidity-controller#readme"
 }
+
