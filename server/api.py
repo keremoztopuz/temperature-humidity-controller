@@ -1,33 +1,29 @@
-from flask import Flask, request, jsonify
+from flask import *
 import psycopg2
-import http.client
-import argparse
 from datetime import datetime
 
-app = Flask(__name__)
-
-# PostgreSQL veritabanı bağlantısı için gerekli bilgileri doldurun
-db_host = "localhost"
-db_name = "temperaturehumudity"
-db_user = "postgres"
-db_password = "123456"
-
-# API endpoint'leri
-from datetime import datetime
-
-def api_getdata(device_id: int, dbtype: str):
+def api_getdata(device_id: int, args):
     try:
         connection = psycopg2.connect(
-            host=db_host, database=db_name, user=db_user, password=db_password, port=5433
+            host = args.dbhost, 
+            database = args.dbname,
+            user = args.dbuser,
+            password = args.dbpassword,
+            port = args.dbport
         )
         cursor = connection.cursor()
+
         # Veriyi sorgulama işlemi
-        if dbtype == "postgresql":
+        if args.dbtype == "postgresql":
             query = "SELECT * FROM devicedatas WHERE device_id = %s ORDER BY data_date desc LIMIT 1;" 
-        elif dbtype == "mssql":
+        elif args.dbtype == "mssql":
             query = "SELECT TOP 1 * FROM devicedatas WHERE device_id = %s ORDER BY data_date desc ;" 
         else:
-            return
+            return jsonify({
+                'status': 'error',
+                'message': 'Invalid database type'
+            })
+        
         cursor.execute(query, (device_id,))
         data = cursor.fetchall()
 
@@ -53,10 +49,14 @@ def api_getdata(device_id: int, dbtype: str):
         })
 
 # PostgreSQL veritabanına veri eklemek için işlev
-def api_setdata(device_id, temperature, humidity):
+def api_setdata(device_id, temperature, humidity, args):
     try:
         connection = psycopg2.connect(
-            host=db_host, database=db_name, user=db_user, password=db_password, port=5433
+            host = args.dbhost, 
+            database = args.dbname, 
+            user = args.dbuser, 
+            password = args.dbpassword, 
+            port = args.dbport
         )
         cursor = connection.cursor()
 
@@ -80,10 +80,14 @@ def api_setdata(device_id, temperature, humidity):
             'message': 'Data could not be added, try again: ' + str(e)
         })
 
-def api_getdevicelist():
+def api_getdevicelist(args):
     try:
         connection = psycopg2.connect(
-            host=db_host, database=db_name, user=db_user, password=db_password, port=5433
+            host = args.dbhost, 
+            database = args.dbname, 
+            user = args.dbuser,
+            password = args.dbpassword,
+            port = args.dbport
         )
         cursor = connection.cursor()
 
@@ -115,11 +119,15 @@ def api_getdevicelist():
             'message': 'Error while retrieving device list: ' + str(e)
         })
 
-def api_setdevicename(device_id, device_name):
+def api_setdevicename(device_id, device_name, args):
     try:
         # Veritabanına bağlanma
         connection = psycopg2.connect(
-            host=db_host, database=db_name, user=db_user, password=db_password, port=5433
+            host = args.dbhost,
+            database = args.dbname,
+            user = args.dbuser,
+            password = args.dbpassword,
+            port = args.dbport
         )
         cursor = connection.cursor()
 
@@ -158,11 +166,14 @@ def api_setdevicename(device_id, device_name):
             'message': 'Error while updating device name: ' + str(e)
         })
 
-
-def api_getgraph(device_id: int, days_back: int):
+def api_getgraph(device_id: int, days_back: int, args):
     try:
         connection = psycopg2.connect(
-            host=db_host, database=db_name, user=db_user, password=db_password, port=5433
+            host = args.dbhost,
+            database = args.dbname,
+            user = args.dbuser,
+            password = args.dbpassword,
+            port = args.dbport
         )
         cursor = connection.cursor()
 
@@ -191,10 +202,14 @@ def api_getgraph(device_id: int, days_back: int):
             'message': 'Error while fetching data for graph: ' + str(e)
         })
 
-def api_getgraphfull(device_id: int, start_date: str, end_date: str):
+def api_getgraphfull(device_id: int, start_date: str, end_date: str, args):
     try:
         connection = psycopg2.connect(
-            host=db_host, database=db_name, user=db_user, password=db_password, port=5433
+            host = args.dbhost,
+            database = args.dbname,
+            user = args.dbuser,
+            password = args.dbpassword,
+            port = args.dbport
         )
         cursor = connection.cursor()
 
@@ -221,12 +236,3 @@ def api_getgraphfull(device_id: int, start_date: str, end_date: str):
             'status': 'error',
             'message': 'Error while fetching data: ' + str(e)
         })
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="server")
-    parser.add_argument('--debug', action='store_true', required=False, help='Enable debug mode')
-    parser.add_argument('--port', type=int, default=5000, required=False, help='Port number (default: 5000)')
-    parser.add_argument('--ip', type=str, default='127.0.0.1', required=False, help='IP address (default: 127.0.0.1)')
-    args = parser.parse_args()
-    print(args.debug)
-    app.run(host=args.ip, port=args.port, debug=args.debug)
