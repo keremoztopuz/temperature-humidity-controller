@@ -6,13 +6,13 @@ from api import *
 
 app = Flask(__name__)
 
-@app.route("/")
-def index():
-    return render_template("static/index.html")
-    
 @app.route("/api/getdata/<int:device_id>", methods=["GET"])
 def getdata(device_id : int ):
     return api_getdata(device_id, args)
+
+@app.route("/api/getcarddata", methods=["GET"])
+def getcarddata():
+    return api_getcarddata(args)
 
 @app.route("/api/setdata/<int:device_id>/<float:temperature>/<float:humidity>", methods=["POST"])
 def setdata(device_id: int, temperature: float, humidity: float):
@@ -34,7 +34,15 @@ def getgraph(device_id : int, days_back: int ):
 @app.route("/api/getgraphfull/<int:device_id>/<string:start_date>/<string:end_date>", methods=["GET"])
 def getgraphfull(device_id: int, start_date: str, end_date: str):
     return api_getgraphfull(device_id, start_date, end_date, args)
-    
+
+@app.route("/")
+def serve_index():
+    return send_from_directory('static', 'index.html')
+
+@app.route("/<path:path>")
+def serve_static(path):
+    return send_from_directory('static', path)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="server")
     parser.add_argument('--debug', action='store_true', required=False, help='Enable debug mode')

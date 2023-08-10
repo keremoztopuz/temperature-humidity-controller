@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "python server/server.py",
-    "server-debug": "python server/server.py --debug --dbport 5433",
+    "server-debug": "python server/server.py --debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -35,12 +35,58 @@ def api_getdata(device_id: int, args):
         for row in data:
             result.append({
                 'device_id': row[0],
-                'data_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'data_date': row[1],
                 'temperature': row[2],
                 'humidity': row[3]
             })
 
         return jsonify({"data": result})
+
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': 'Error while fetching data: ' + str(e)
+        })
+
+def api_getcarddata(args):
+    try:
+        connection = psycopg2.connect(
+            host = args.dbhost, 
+            database = args.dbname,
+            user = args.dbuser,
+            password = args.dbpassword,
+            port = args.dbport
+        )
+        cursor = connection.cursor()
+
+        # Veriyi sorgulama işlemi
+        if args.dbtype == "postgresql":
+            query = "SELECT devices.device_name, devicedatas.data_date, devicedatas.temperature, devicedatas.humidity FROM devicedatas LEFT OUTER JOIN devices ON devices.device_id = devicedatas.device_id ORDER BY devicedatas.device_id, devicedatas.data_date desc LIMIT 1;" 
+        elif args.dbtype == "mssql":
+            query = "SELECT TOP 1 * FROM devicedatas ORDER BY device_id, data_date desc ;" 
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'Invalid database type'
+            })
+        
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        # Sorgulanan veriyi JSON olarak döndürme
+        result = []
+        for row in data:
+            result.append({
+                'device_name': row[0],
+                'data_date': row[1],
+                'temperature': row[2],
+                'humidity': row[3]
+            })
+
+        return jsonify(result)
 
     except Exception as e:
         return jsonify({
@@ -107,11 +153,7 @@ def api_getdevicelist(args):
                 'name': row[1]
             })
 
-        return jsonify({
-            'status': 'ok',
-            'message': 'Device list retrieved successfully',
-            'devices': devices
-        })
+        return jsonify(devices)
 
     except Exception as e:
         return jsonify({
