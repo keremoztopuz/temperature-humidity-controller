@@ -1,0 +1,11 @@
+.navbar {
+    background-color: #e4002b;
+}
+
+.navbar-brand {
+    color: antiquewhite;
+}
+
+.navbar-brand img {
+    height: 64px;
+}
