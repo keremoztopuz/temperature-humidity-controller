@@ -11,12 +11,14 @@
 </head>
 
 <body>
-  <nav class="navbar sticky-top ">
-    <div class="container">
+  <nav class="navbar navbar-expand-lg ">
+    <div class="container-fluid">
       <a class="navbar-brand" href="#">
         <img src="/images/logo.png" alt="Leonardo Logo">
         Leonardo Temperature and Humidity Control Server
       </a>
+      <div class="justify-content-start">
+      </div>
     </div>
   </nav>
 
@@ -53,6 +55,143 @@
 
   
   <script src="/js/bootstrap.bundle.min.js"></script>
+
+  <div class="container-xxl mt-3">
+    <div id="cardcontainerid" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 gy-3">
+    </div>
+  </div>
+
+  <script>
+    $.getJSON("http://127.0.0.1:5000/api/getcarddata", function (data) {
+      for (let i = 0; i <= data.length; i++) {
+        $("#cardcontainerid").append(
+            '<div class="col">'+
+              '<div class="card">'+
+                '<div class="card-header">'+data[i].device_name+
+              '</div>'+
+              '<div class="card-body">'+
+                '<div class="text-center">'+
+                  '<img src="images/temperature.svg" class="rounded mx-auto d-block" height="48"/>'+data[i].temperature+
+                '</div>'+
+                '<div class="text-center">'+
+                  '<img src="images/humidity.svg"  class="rounded mx-auto d-block" height="48"/>'+data[i].humidity+'%'+
+                '</div>'+
+              '</div>'+
+              '<div class="card-footer text-body-secondary">'+data[i].data_date+'</div>'+
+              '</div>'
+);
+      }
+    
+    }
+    );
+
+  </script>
+
+  
+  <script src="/js/bootstrap.bundle.min.js"></script>
+
+  <div class="container-xxl mt-3">
+    <div id="cardcontainerid" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 gy-3">
+    </div>
+  </div>
+
+  <script>
+    $.getJSON("http://127.0.0.1:5000/api/getcarddata", function (data) {
+      for (let i = 0; i <= data.length; i++) {
+        $("#cardcontainerid").append(
+            '<div class="col">'+
+              '<div class="card">'+
+                '<div class="card-header">'+data[i].device_name+
+              '</div>'+
+              '<div class="card-body">'+
+                '<div class="text-center">'+
+                  '<img src="images/temperature.svg" class="rounded mx-auto d-block" height="48"/>'+data[i].temperature+
+                '</div>'+
+                '<div class="text-center">'+
+                  '<img src="images/humidity.svg"  class="rounded mx-auto d-block" height="48"/>'+data[i].humidity+'%'+
+                '</div>'+
+              '</div>'+
+              '<div class="card-footer text-body-secondary">'+data[i].data_date+'</div>'+
+              '</div>'
+);
+      }
+    
+    }
+    );
+
+  </script>
+
+  
+  <script src="/js/bootstrap.bundle.min.js"></script>
+
+  <div class="container-xxl mt-3">
+    <div id="cardcontainerid" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 gy-3">
+    </div>
+  </div>
+
+  <script>
+    $.getJSON("http://127.0.0.1:5000/api/getcarddata", function (data) {
+      for (let i = 0; i <= data.length; i++) {
+        $("#cardcontainerid").append(
+            '<div class="col">'+
+              '<div class="card">'+
+                '<div class="card-header">'+data[i].device_name+
+              '</div>'+
+              '<div class="card-body">'+
+                '<div class="text-center">'+
+                  '<img src="images/temperature.svg" class="rounded mx-auto d-block" height="48"/>'+data[i].temperature+
+                '</div>'+
+                '<div class="text-center">'+
+                  '<img src="images/humidity.svg"  class="rounded mx-auto d-block" height="48"/>'+data[i].humidity+'%'+
+                '</div>'+
+              '</div>'+
+              '<div class="card-footer text-body-secondary">'+data[i].data_date+'</div>'+
+              '</div>'
+);
+      }
+    
+    }
+    );
+
+  </script>
+
+  
+  <script src="/js/bootstrap.bundle.min.js"></script>
+
+  <div class="container-xxl mt-3">
+    <div id="cardcontainerid" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 gy-3">
+    </div>
+  </div>
+
+  <script>
+    $.getJSON("http://127.0.0.1:5000/api/getcarddata", function (data) {
+      for (let i = 0; i <= data.length; i++) {
+        $("#cardcontainerid").append(
+            '<div class="col">'+
+              '<div class="card">'+
+                '<div class="card-header">'+data[i].device_name+
+              '</div>'+
+              '<div class="card-body">'+
+                '<div class="text-center">'+
+                  '<img src="images/temperature.svg" class="rounded mx-auto d-block" height="48"/>'+data[i].temperature+
+                '</div>'+
+                '<div class="text-center">'+
+                  '<img src="images/humidity.svg"  class="rounded mx-auto d-block" height="48"/>'+data[i].humidity+'%'+
+                '</div>'+
+              '</div>'+
+              '<div class="card-footer text-body-secondary">'+data[i].data_date+'</div>'+
+              '</div>'
+);
+      }
+    
+    }
+    );
+
+  </script>
+
+  
+  <script src="/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
